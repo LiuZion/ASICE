@@ -1,0 +1,59 @@
+# Example: CO adsorption on Pt(111)
+# Usage: python -m adsorb_search.main --config configs/example_Pt111_CO.yaml
+
+surface_file: "POSCAR_slab"
+adsorbate_file: "CO.xyz"
+output_dir: "outputs_CO_on_Pt111"
+
+surface:
+  top_layer_method: "z_cutoff"
+  z_cutoff: 1.5
+  vacuum_direction: "z"
+  use_symmetry: false
+
+site_generation:
+  generate_top: true
+  generate_bridge: true
+  generate_hollow: true
+  neighbor_cutoff: 3.2
+  site_merge_tolerance: 0.25
+
+adsorbate:
+  type: "small_molecule"
+  binding_atoms: "auto"
+  allow_reverse_binding: true
+
+sampling:
+  heights: [1.4, 1.8, 2.2, 2.6]
+  orientations:
+    mode: "preset"
+    include_vertical: true
+    include_tilted: true
+    include_flat: true
+  max_initial_configs: 500
+
+filter:
+  min_adsorbate_surface_distance: 0.85
+  max_adsorbate_surface_distance: 4.0
+  min_interatomic_distance_scale: 0.65
+  remove_duplicates: true
+  duplicate_rmsd_tolerance: 0.25
+
+pre_relax:
+  enabled: true
+  calculator: "emt"
+  fmax: 0.08
+  steps: 200
+  fix_bottom_layers: true
+  num_fixed_layers: 2
+
+selection:
+  n_candidates: 10
+  strategy: "energy_diversity"
+  diversity_weight: 0.2
+
+output:
+  write_poscar: true
+  write_xyz: true
+  write_summary_csv: true
+  write_site_visualization: false
